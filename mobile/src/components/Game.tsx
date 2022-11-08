@@ -1,6 +1,8 @@
 import { Button, HStack, Text, useTheme, VStack } from 'native-base';
 import { X, Check } from 'phosphor-react-native';
 import { getName } from 'country-list';
+import dayjs from 'dayjs';
+import ptBR from 'dayjs/locale/pt-br';
 
 import { Team } from './Team';
 
@@ -15,6 +17,7 @@ interface GuessProps {
 
 export interface GameProps {
   id: string;
+  date: string;
   firstTeamCountryCode: string;
   secondTeamCountryCode: string;
   guess: null | GuessProps;
@@ -23,17 +26,27 @@ export interface GameProps {
 interface Props {
   data: GameProps;
   onGuessConfirm: () => void;
+  firstTeamPoints: string;
+  secondTeamPoints: string;
   setFirstTeamPoints: (value: string) => void;
   setSecondTeamPoints: (value: string) => void;
 }
 
 export function Game({
   data,
+  firstTeamPoints,
   setFirstTeamPoints,
+  secondTeamPoints,
   setSecondTeamPoints,
   onGuessConfirm,
 }: Props) {
   const { colors, sizes } = useTheme();
+
+  const formattedGameDate = dayjs(data.date)
+    .locale(ptBR)
+    .format('DD [de] MMMM [de] YYYY [às] HH:00[h]');
+
+  const hasGuess = data.guess?.firstTeamPoints !== undefined;
 
   return (
     <VStack
@@ -52,7 +65,7 @@ export function Game({
       </Text>
 
       <Text color="gray.200" fontSize="xs">
-        22 de Novembro de 2022 às 16:00h
+        {formattedGameDate}
       </Text>
 
       <HStack
@@ -65,6 +78,10 @@ export function Game({
           code={data.firstTeamCountryCode}
           position="right"
           onChangeText={setFirstTeamPoints}
+          points={
+            hasGuess ? String(data.guess.firstTeamPoints) : firstTeamPoints
+          }
+          allowGuess={!hasGuess}
         />
 
         <X color={colors.gray[300]} size={sizes[6]} />
@@ -73,6 +90,10 @@ export function Game({
           code={data.secondTeamCountryCode}
           position="left"
           onChangeText={setSecondTeamPoints}
+          points={
+            hasGuess ? String(data.guess.secondTeamPoints) : secondTeamPoints
+          }
+          allowGuess={!hasGuess}
         />
       </HStack>
 

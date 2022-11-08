@@ -6,10 +6,18 @@ import { Input } from './Input';
 interface Props {
   code: string;
   position: 'left' | 'right';
+  points: string;
+  allowGuess: boolean;
   onChangeText: (value: string) => void;
 }
 
-export function Team({ code, position, onChangeText }: Props) {
+export function Team({
+  allowGuess,
+  code,
+  position,
+  onChangeText,
+  points,
+}: Props) {
   return (
     <HStack alignItems="center">
       {position === 'left' && (
@@ -23,6 +31,8 @@ export function Team({ code, position, onChangeText }: Props) {
         fontSize="xs"
         keyboardType="numeric"
         onChangeText={onChangeText}
+        value={points}
+        isReadOnly={!allowGuess}
       />
 
       {position === 'right' && (

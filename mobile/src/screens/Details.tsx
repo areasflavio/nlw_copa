@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Share } from 'react-native';
 
 import { EmptyMyPoolList } from '../components/EmptyMyPoolList';
+import { Guesses } from '../components/Guesses';
 import { Header } from '../components/Header';
 import { Loading } from '../components/Loading';
 import { Option } from '../components/Option';
@@ -81,6 +82,8 @@ export function Details() {
               onPress={() => setSelectedOption('ranking')}
             />
           </HStack>
+
+          <Guesses poolId={pool.id} />
         </VStack>
       ) : (
         <EmptyMyPoolList code={pool.code} />
